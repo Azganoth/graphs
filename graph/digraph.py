@@ -1,4 +1,6 @@
-from typing import Dict, Hashable, List, Set, Tuple
+from __future__ import annotations
+
+from typing import Dict, Hashable, List, Optional, Set, Tuple
 from math import inf
 
 from .exceptions import VertexError, EdgeError
@@ -282,3 +284,57 @@ class Digraph(BaseGraph):
             raise VertexError(f"the graph '{self}' is empty")
 
         return [(self.in_degree(v), self.out_degree(v)) for v in self._vertices]
+
+    # FROM
+
+    @staticmethod
+    def graph_from(vertices: Set[Hashable],
+                   edges: List[Tuple[Hashable, Hashable, Optional[dict]]],
+                   name: str = None,
+                   desc: str = None) -> Digraph:
+        """Creates a directed graph from the vertices and edges.
+
+        Args:
+            vertices: The vertices.
+            edges: The edges.
+            name: The name of the graph.
+            desc: The description of the graph.
+
+        Returns:
+            A directed graph.
+
+        Raises:
+            VertexError: Raises when a vertex from the set of edges isn't in set of vertices.
+        """
+        graph = Digraph(name, desc)
+        for v in vertices:
+            graph.add_vertex(v)
+        for e in edges:
+            if len(e) == 3:
+                graph.add_edge(e[0], e[1], **e[2])
+            else:
+                graph.add_edge(e[0], e[1])
+        return graph
+
+    @staticmethod
+    def graph_from_edges(edges: List[Tuple[Hashable, Hashable, Optional[dict]]],
+                         name: str = None,
+                         desc: str = None) -> Digraph:
+        """Creates a directed graph from the edges.
+
+        Args:
+            edges: The edges.
+            name: The name of the graph.
+            desc: The description of the graph.
+
+        Returns:
+            A directed graph.
+        """
+        graph = Digraph(name, desc)
+        for e in edges:
+            u, v = e[0], e[1]
+            graph.add_vertex(u)
+            graph.add_vertex(v)
+
+            graph._edges.setdefault(u, {})[v] = e[2] if len(e) == 3 else {}
+        return graph
