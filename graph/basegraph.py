@@ -126,6 +126,17 @@ class BaseGraph:
     # EDGES
 
     @abstractmethod
+    def dataless_edges(self) -> List[Tuple[Hashable, Hashable]]:
+        """Returns a list of unique edges without their data.
+
+        Each edge in the list is composed of vertex u and vertex v.
+
+        Returns:
+            A list of unique edges.
+        """
+        pass
+
+    @abstractmethod
     def has_edge(self, vertex_u: Hashable, vertex_v: Hashable) -> bool:
         """Checks if the edge is in the graph.
 

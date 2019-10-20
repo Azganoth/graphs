@@ -46,13 +46,6 @@ class Digraph(BaseGraph):
     # EDGES
 
     def dataless_edges(self) -> List[Tuple[Hashable, Hashable]]:
-        """Returns a list of edges without their data.
-
-        Each edge in the list is composed of vertex u and vertex v.
-
-        Returns:
-            A list of edges.
-        """
         return [(u, v) for u in self._edges for v in self._edges[u]]
 
     def has_edge(self, vertex_u: Hashable, vertex_v: Hashable) -> bool:

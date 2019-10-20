@@ -45,14 +45,7 @@ class Graph(BaseGraph):
 
     # EDGES
 
-    def dataless_unique_edges(self) -> List[Tuple[Hashable, Hashable]]:
-        """Returns a list of unique edges without their data.
-
-        Each edge in the list is composed of vertex u and vertex v.
-
-        Returns:
-            A list of unique edges.
-        """
+    def dataless_edges(self) -> List[Tuple[Hashable, Hashable]]:
         unique_edges = []
         for u in self._edges:
             for v in self._edges[u]:
@@ -116,7 +109,7 @@ class Graph(BaseGraph):
         return len(self._vertices)
 
     def size(self) -> int:
-        return len(self.dataless_unique_edges())
+        return len(self.dataless_edges())
 
     # NEIGHBOURS
 
@@ -132,7 +125,7 @@ class Graph(BaseGraph):
     # REPRESENTATIONS
 
     def edges_list(self) -> List[Tuple[Hashable, Hashable, dict]]:
-        return [(u, v, self._edges[u][v]) for u, v in self.dataless_unique_edges()]
+        return [(u, v, self._edges[u][v]) for u, v in self.dataless_edges()]
 
     def adjacency_list(self) -> Dict[Hashable, Set[Hashable]]:
         return {u: set(self._edges[u]) for u in self._edges}
