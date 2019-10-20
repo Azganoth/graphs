@@ -2,7 +2,8 @@ from .algorithms import (
     breath_first_search,
     depth_first_search,
     dijkstra,
-    bellman_ford
+    bellman_ford,
+    floyd_warshall
 )
 from .exceptions import VertexError, EdgeError
 from .graph import Graph
