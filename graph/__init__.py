@@ -1,7 +1,8 @@
 from .algorithms import (
     breath_first_search,
     depth_first_search,
-    dijkstra
+    dijkstra,
+    bellman_ford
 )
 from .exceptions import VertexError, EdgeError
 from .graph import Graph

@@ -58,3 +58,26 @@ def dijkstra(graph: BaseGraph, start_vertex: Hashable, dist: Callable[[dict], in
                 parents[v] = u
 
     return distance, parents
+
+
+def bellman_ford(graph: BaseGraph, start_vertex: Hashable, dist: Callable[[dict], int]):
+    distance = {}
+    parents = {}
+    for v in graph.vertices:
+        distance[v] = inf
+        parents[v] = None
+
+    distance[start_vertex] = 0
+
+    for _ in range(graph.order() - 1):
+        for u, v, d in graph.edges_list():
+            temp_distance = distance[u] + dist(d)
+            if temp_distance < distance[v]:
+                distance[v] = temp_distance
+                parents[v] = u
+
+    for u, v, d in graph.edges_list():
+        if distance[u] + dist(d) < distance[v]:
+            raise ValueError(f"graph {graph} contains negative-weight cycle")
+
+    return distance, parents
