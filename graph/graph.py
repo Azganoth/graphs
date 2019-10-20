@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict, Hashable, List, Optional, Set, Tuple
+from typing import Callable, Dict, Hashable, List, Optional, Set, Tuple
 from math import inf
 
 from .exceptions import VertexError, EdgeError
@@ -137,16 +137,16 @@ class Graph(BaseGraph):
     def adjacency_list(self) -> Dict[Hashable, Set[Hashable]]:
         return {u: set(self._edges[u]) for u in self._edges}
 
-    def adjacency_matrix(self, weight_key: Hashable = None) -> Dict[Hashable, Dict[Hashable, int]]:
-        weighted = weight_key is not None
+    def adjacency_matrix(self,
+                         weight: Callable[[dict], int]) -> Dict[Hashable, Dict[Hashable, int]]:
         adjacency_matrix = {}
         for u in self._vertices:
             adjacency_matrix[u] = {}
             for v in self._vertices:
                 if u in self._edges and v in self._edges[u]:
-                    adjacency_matrix[u][v] = int(self._edges[u][v][weight_key]) if weighted else 1
+                    adjacency_matrix[u][v] = weight(self._edges[u][v])
                 else:
-                    adjacency_matrix[u][v] = inf if weighted else 0
+                    adjacency_matrix[u][v] = inf
         return adjacency_matrix
 
     # DEGREES

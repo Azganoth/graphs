@@ -1,4 +1,4 @@
-from typing import Dict, Hashable, List, Set, Tuple
+from typing import Callable, Dict, Hashable, List, Set, Tuple
 from abc import abstractmethod
 
 
@@ -283,12 +283,12 @@ class BaseGraph:
         pass
 
     @abstractmethod
-    def adjacency_matrix(self, weight_key: Hashable = None) -> Dict[Hashable, Dict[Hashable, int]]:
+    def adjacency_matrix(self,
+                         weight: Callable[[dict], int]) -> Dict[Hashable, Dict[Hashable, int]]:
         """Returns the adjacency matrix representation of the graph.
 
         Args:
-            weight_key: The key for the weight value in the edge's data.
-                If specified the representation will be weighted.
+            weight: The function that will extract the weight value of the edge's data.
 
         Returns:
             A multi-dimensional dictionary.
