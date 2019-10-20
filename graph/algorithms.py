@@ -1,37 +1,60 @@
-from collections import deque
+from typing import Hashable, Callable
 
-from typing import Hashable
+from collections import deque
+from math import inf
 
 from .basegraph import BaseGraph
 
 
 def breath_first_search(graph: BaseGraph, start_vertex: Hashable):
-    frontier = deque([start_vertex])  # enqueue the starting vertex to be explored
-    discovered = {start_vertex}  # set the starting vertex as discovered
-    parents = {start_vertex: None}  # path each vertex take to return to the starting vertex
+    frontier = deque([start_vertex])
+    discovered = {start_vertex}
+    parents = {start_vertex: None}
 
-    while frontier:  # loop through unexplored vertices
-        u = frontier.popleft()  # dequeue the next vertex to be explored
-        for v in graph.neighbours(u):  # search for reachable vertices (explore the vertex u)
-            if v not in discovered:  # check whether the neighbour has been explored
-                parents[v] = u  # set vertex parent
-                discovered.add(v)  # mark vertex as discovered
-                frontier.append(v)  # enqueue the newly discovered vertex to be explored
+    while frontier:
+        u = frontier.popleft()
+        for v in graph.neighbours(u):
+            if v not in discovered:
+                parents[v] = u
+                discovered.add(v)
+                frontier.append(v)
 
     return discovered, parents
 
 
 def depth_first_search(graph: BaseGraph, start_vertex: Hashable):
-    frontier = deque([start_vertex])  # push the starting vertex to be explored
+    frontier = deque([start_vertex])
     discovered = set()
-    parents = {start_vertex: None}  # path each vertex take to return to the starting vertex
+    parents = {start_vertex: None}
 
-    while frontier:  # loop through unexplored vertices
-        u = frontier.pop()  # pop the next vertex to be explored
-        if u not in discovered:  # check whether the vertex has been explored
-            discovered.add(u)  # mark vertex as discovered
-            for v in graph.neighbours(u):  # search for reachable vertices (explore the vertex u)
-                parents[v] = u  # set vertex parent
-                frontier.append(v)  # push the newly discovered vertex to be explored
+    while frontier:
+        u = frontier.pop()
+        if u not in discovered:
+            discovered.add(u)
+            for v in graph.neighbours(u):
+                parents[v] = u
+                frontier.append(v)
 
     return discovered, parents
+
+
+def dijkstra(graph: BaseGraph, start_vertex: Hashable, dist: Callable[[dict], int]):
+    vertices = set(graph.vertices)
+    distance = {}
+    parents = {}
+    for v in vertices:
+        distance[v] = inf
+        parents[v] = None
+
+    distance[start_vertex] = 0
+
+    while vertices:
+        u = min(vertices, key=lambda x: distance[x])
+        vertices.remove(u)
+        for v in graph.neighbours(u):
+            temp_distance = distance[u] + dist(graph.edges[u][v])
+            if temp_distance < distance[v]:
+                distance[v] = temp_distance
+                parents[v] = u
+
+    return distance, parents
