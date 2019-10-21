@@ -110,3 +110,25 @@ def floyd_warshall(graph: BaseGraph, dist: Callable[[dict], int]):
                     children[u][v] = children[u][w]
 
     return distance, children
+
+
+def kruskal(graph: BaseGraph, weight: Callable[[dict], int]):
+    edges = []
+    cost = 0
+
+    subsets = {frozenset([v]) for v in graph.vertices}
+
+    for u, v, d in sorted(graph.edges_list(), key=lambda e: weight(e[2])):
+        subset_u = next((s for s in subsets if u in s))
+        subset_v = next((s for s in subsets if v in s))
+        if subset_u != subset_v:
+            edges.append((u, v))
+            cost += weight(d)
+            subsets.remove(subset_u)
+            subsets.remove(subset_v)
+            subsets.add(subset_u | subset_v)
+
+        if len(subsets) == 1:
+            break
+
+    return edges, cost

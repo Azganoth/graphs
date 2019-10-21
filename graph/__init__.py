@@ -3,7 +3,8 @@ from .algorithms import (
     depth_first_search,
     dijkstra,
     bellman_ford,
-    floyd_warshall
+    floyd_warshall,
+    kruskal
 )
 from .exceptions import VertexError, EdgeError
 from .graph import Graph
