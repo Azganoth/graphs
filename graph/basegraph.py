@@ -24,6 +24,10 @@ class BaseGraph:
     def __str__(self):
         return self._name
 
+    def __repr__(self):
+        return (f'G({{{", ".join(map(str, self.vertices))}}}, '
+                f'[{", ".join(map(lambda e: f"({e[0]}, {e[1]})", self.edges_list()))}])')
+
     @property
     def name(self):
         """The name of the graph."""
