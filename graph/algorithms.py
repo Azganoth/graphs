@@ -132,3 +132,25 @@ def kruskal(graph: BaseGraph, weight: Callable[[dict], int]):
             break
 
     return edges, cost
+
+
+def prim_jarnik(graph: BaseGraph, start_vertex: Hashable, weight: Callable[[dict], int]):
+    vertices = set(graph.vertices)
+    costs = {}
+    parents = {}
+    for v in vertices:
+        costs[v] = inf
+        # parents[v] = None
+
+    costs[start_vertex] = 0
+
+    while vertices:
+        u = min(vertices, key=lambda x: costs[x])
+        vertices.remove(u)
+        for v in graph.neighbours(u):
+            temp_cost = weight(graph.edges[u][v])
+            if v in vertices and temp_cost < costs[v]:
+                costs[v] = temp_cost
+                parents[v] = u
+
+    return [(u, parents[u]) for u in parents], sum(costs.values())

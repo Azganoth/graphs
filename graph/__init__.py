@@ -4,7 +4,8 @@ from .algorithms import (
     dijkstra,
     bellman_ford,
     floyd_warshall,
-    kruskal
+    kruskal,
+    prim_jarnik
 )
 from .exceptions import VertexError, EdgeError
 from .graph import Graph
