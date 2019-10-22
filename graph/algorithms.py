@@ -1,6 +1,7 @@
-from typing import Hashable, Callable
+from typing import Callable, Hashable
 
 from collections import deque
+from random import choice
 from math import inf
 
 from .basegraph import BaseGraph
@@ -131,18 +132,15 @@ def kruskal(graph: BaseGraph, weight: Callable[[dict], int]):
         if len(subsets) == 1:
             break
 
-    return edges, cost
+    return cost, edges
 
 
-def prim_jarnik(graph: BaseGraph, start_vertex: Hashable, weight: Callable[[dict], int]):
+def prim_jarnik(graph: BaseGraph, weight: Callable[[dict], int], start_vertex: Hashable = None):
     vertices = set(graph.vertices)
-    costs = {}
+    costs = {v: inf for v in vertices}
     parents = {}
-    for v in vertices:
-        costs[v] = inf
-        # parents[v] = None
 
-    costs[start_vertex] = 0
+    costs[start_vertex or choice(tuple(vertices))] = 0
 
     while vertices:
         u = min(vertices, key=lambda x: costs[x])
@@ -153,4 +151,4 @@ def prim_jarnik(graph: BaseGraph, start_vertex: Hashable, weight: Callable[[dict
                 costs[v] = temp_cost
                 parents[v] = u
 
-    return [(u, parents[u]) for u in parents], sum(costs.values())
+    return sum(costs.values()), [(u, parents[u]) for u in parents]

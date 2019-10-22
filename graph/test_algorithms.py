@@ -98,12 +98,12 @@ graph_2 = Graph.graph_from({0, 1, 2, 3, 4, 5, 6, 7, 8},
                             (8, 7, {'weight': 7}), (6, 7, {'weight': 1})])
 
 kruskal_result = kruskal(graph_2, weight_fun)
-assert kruskal_result == ([(7, 6), (2, 8), (5, 6), (0, 1), (2, 5), (2, 3), (0, 7), (3, 4)], 37)
+assert kruskal_result[0] == 37 and len(kruskal_result[1]) == graph_2.order() - 1
 
 print('\nKruskal: ', kruskal_result, 'Runned on the graph: ', repr(graph_2), sep='\n')
 
 # prim-jarnik test
-prim_jarnik_result = prim_jarnik(graph_2, 0, weight_fun)
-assert prim_jarnik_result == ([(1, 0), (7, 6), (2, 1), (8, 2), (3, 2), (5, 2), (6, 5), (4, 3)], 37)
+prim_jarnik_result = prim_jarnik(graph_2, weight_fun)
+assert prim_jarnik_result[0] == 37 and len(prim_jarnik_result[1]) == graph_2.order() - 1
 
 print('\nPrim-Jarnik: ', prim_jarnik_result, 'Runned on the graph: ', repr(graph_2), sep='\n')
