@@ -38,7 +38,7 @@ def depth_first_search(graph: BaseGraph, start_vertex: Hashable):
     return discovered, parents
 
 
-def dijkstra(graph: BaseGraph, start_vertex: Hashable, dist: Callable[[dict], int]):
+def dijkstra(graph: BaseGraph, start_vertex: Hashable, weight: Callable[[dict], int]):
     vertices = set(graph.vertices)
     distance = {}
     parents = {}
@@ -52,7 +52,7 @@ def dijkstra(graph: BaseGraph, start_vertex: Hashable, dist: Callable[[dict], in
         u = min(vertices, key=lambda x: distance[x])
         vertices.remove(u)
         for v in graph.neighbours(u):
-            temp_distance = distance[u] + dist(graph.edges[u][v])
+            temp_distance = distance[u] + weight(graph.edges[u][v])
             if temp_distance < distance[v]:
                 distance[v] = temp_distance
                 parents[v] = u
@@ -60,7 +60,7 @@ def dijkstra(graph: BaseGraph, start_vertex: Hashable, dist: Callable[[dict], in
     return distance, parents
 
 
-def bellman_ford(graph: BaseGraph, start_vertex: Hashable, dist: Callable[[dict], int]):
+def bellman_ford(graph: BaseGraph, start_vertex: Hashable, weight: Callable[[dict], int]):
     distance = {}
     parents = {}
     for v in graph.vertices:
@@ -71,19 +71,19 @@ def bellman_ford(graph: BaseGraph, start_vertex: Hashable, dist: Callable[[dict]
 
     for _ in range(graph.order() - 1):
         for u, v, d in graph.edges_list():
-            temp_distance = distance[u] + dist(d)
+            temp_distance = distance[u] + weight(d)
             if temp_distance < distance[v]:
                 distance[v] = temp_distance
                 parents[v] = u
 
     for u, v, d in graph.edges_list():
-        if distance[u] + dist(d) < distance[v]:
+        if distance[u] + weight(d) < distance[v]:
             raise ValueError(f"graph {graph} contains negative-weight cycle")
 
     return distance, parents
 
 
-def floyd_warshall(graph: BaseGraph, dist: Callable[[dict], int]):
+def floyd_warshall(graph: BaseGraph, weight: Callable[[dict], int]):
     distance = {}
     children = {}
 
@@ -95,7 +95,7 @@ def floyd_warshall(graph: BaseGraph, dist: Callable[[dict], int]):
             children[u][v] = None
 
     for u, v, d in graph.edges_list():
-        distance[u][v] = dist(d)
+        distance[u][v] = weight(d)
         children[u][v] = v
 
     for w in graph.vertices:
