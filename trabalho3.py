@@ -1,9 +1,8 @@
 from textwrap import dedent
-from math import inf
 from time import sleep
 from re import compile as re_compile
 
-from graph import Graph, Digraph, kruskal, prim_jarnik
+from graph import Graph, kruskal, prim_jarnik
 
 
 def true_false_input(message: str) -> bool:
@@ -31,19 +30,18 @@ if __name__ == '__main__':
 
     sleep(1)
 
-    directed = False
-    # weighted = true_false_input("O grafo é valorado (apenas arestas)? (s/n): ")
-    weighted = True
+    weighted = true_false_input("O grafo é valorado (apenas arestas)? (s/n): ")
+    # weighted = True
 
-    graph = Digraph() if directed else Graph()
+    graph = Graph()
 
     # set v
     set_v = None
     while not set_v:
-        # temp_set_v = set(vertices_re.findall(input(dedent("""
-        # Informe o conjunto V do grafo, e.g. 'u,v,x,y' (sem aspas):
-        # """))))
-        temp_set_v = set(vertices_re.findall('0,1,2,3,4,5,6,7,8'))
+        temp_set_v = set(vertices_re.findall(input(dedent("""
+        Informe o conjunto V do grafo, e.g. 'u,v,x,y' (sem aspas):
+        """))))
+        # temp_set_v = set(vertices_re.findall('0,1,2,3,4,5,6,7,8'))
         if true_false_input(f"Conjunto V := {{{', '.join(temp_set_v)}}}? (s/n): "):
             set_v = temp_set_v
 
@@ -54,14 +52,23 @@ if __name__ == '__main__':
     edges_re = edges_weighted_re if weighted else edges_weightless_re
     set_e = None
     while not set_e:
-        # temp_set_e = set(edges_re.findall(input(dedent("""
-        # Informe o conjunto E do grafo, e.g. 'u,v,valor;x,y,valor;' OU 'u,v;x,y;' (sem aspas):
-        # """))))
-        temp_set_e = set(edges_re.findall('0,1,4;1,7,11;0,7,8;1,2,8;2,3,7;3,4,9;4,5,10;'
-                                          '5,3,14;2,5,4;2,8,2;8,6,6;6,5,2;8,7,7;6,7,1;'))
-        if true_false_input(f"Conjunto E := {{"
-                            f"{', '.join(map(lambda e: f'({e[0]}, {e[1]})', temp_set_e))}"
-                            f"}}? (s/n): "):
+        temp_set_e = set(edges_re.findall(input(dedent("""
+        Informe o conjunto E do grafo, e.g. 'u,v,valor;x,y,valor;' OU 'u,v;x,y;' (sem aspas):
+        """))))
+        # temp_set_e = set(edges_re.findall('0,1,4;1,7,11;0,7,8;1,2,8;2,3,7;3,4,9;4,5,10;'
+        #                                   '5,3,14;2,5,4;2,8,2;8,6,6;6,5,2;8,7,7;6,7,1;'))
+
+        temp_set_e_u = set(map(lambda e: e[0], temp_set_e))  # set of the 1th vertex of each edge
+        temp_set_e_v = set(map(lambda e: e[1], temp_set_e))  # set of the 2th vertex of each edge
+
+        # if the list isn't empty it means that the provided set of edges won't create a connected
+        # graph, so we will inform the user and ask for another set of edges
+        if [v for v in set_v if v not in temp_set_e_u and v not in temp_set_e_v]:
+            print("Informe um conjunto de arestas que formem um grafo conexo! "
+                  "(utiliza todos os vértices)")
+        elif true_false_input(f"Conjunto E := {{"
+                              f"{', '.join(map(lambda e: f'({e[0]}, {e[1]})', temp_set_e))}"
+                              f"}}? (s/n): "):
             set_e = temp_set_e
 
     for edge in set_e:
