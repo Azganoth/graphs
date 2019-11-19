@@ -99,6 +99,18 @@ class BaseGraph:
         pass
 
     @abstractmethod
+    def pop_vertex(self, vertex_v: Hashable) -> dict:
+        """Removes a vertex from the graph and returns it's data.
+
+        Args:
+            vertex_v: The vertex v.
+
+        Raises:
+            VertexError: Raises when the vertex isn't in the graph.
+        """
+        pass
+
+    @abstractmethod
     def get_vertex_data(self, vertex_v: Hashable) -> dict:
         """Returns the vertex's data.
 
@@ -186,7 +198,21 @@ class BaseGraph:
         pass
 
     @abstractmethod
-    def get_edge_data(self, vertex_u: Hashable, vertex_v: Hashable):
+    def pop_edge(self, vertex_u: Hashable, vertex_v: Hashable) -> dict:
+        """Removes an edge from the graph and returns it's data.
+
+        Args:
+            vertex_u: The vertex u of the edge.
+            vertex_v: The vertex v of the edge.
+
+        Raises:
+            VertexError: Raises when a vertex isn't in the graph.
+            EdgeError: Raises when the edge isn't in the graph.
+        """
+        pass
+
+    @abstractmethod
+    def get_edge_data(self, vertex_u: Hashable, vertex_v: Hashable) -> dict:
         """Returns the edge's data.
 
         Args:

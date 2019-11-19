@@ -31,6 +31,12 @@ class Graph(BaseGraph):
 
         del self._vertices[vertex_v]
 
+    def pop_vertex(self, vertex_v: Hashable):
+        if vertex_v not in self._vertices:
+            raise VertexError(f"vertex '{vertex_v}' isn't in the graph '{self}'")
+
+        return self._vertices.pop(vertex_v)
+
     def get_vertex_data(self, vertex_v: Hashable) -> dict:
         if vertex_v not in self._vertices:
             raise VertexError(f"vertex '{vertex_v}' isn't in the graph '{self}'")
@@ -87,6 +93,23 @@ class Graph(BaseGraph):
             del self._edges[vertex_v][vertex_u]
             if not self._edges[vertex_v]:
                 del self._edges[vertex_v]
+
+    def pop_edge(self, vertex_u: Hashable, vertex_v: Hashable):
+        if not self.has_edge(vertex_u, vertex_v):
+            raise EdgeError(f"neither '{{{vertex_u}, {vertex_v}}}' nor '{{{vertex_v}, {vertex_u}}}'"
+                            f"edges are in the graph '{self}'")
+
+        edge_data = self._edges[vertex_u].pop(vertex_v)
+
+        if not self._edges[vertex_u]:
+            del self._edges[vertex_u]
+
+        if vertex_v != vertex_u:
+            del self._edges[vertex_v][vertex_u]
+            if not self._edges[vertex_v]:
+                del self._edges[vertex_v]
+
+        return edge_data
 
     def get_edge_data(self, vertex_u: Hashable, vertex_v: Hashable):
         if not self.has_edge(vertex_u, vertex_v):
