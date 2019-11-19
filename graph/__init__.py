@@ -8,5 +8,6 @@ from .algorithms import (
     prim_jarnik
 )
 from .exceptions import VertexError, EdgeError
+from .basegraph import BaseGraph
 from .graph import Graph
 from .digraph import Digraph
