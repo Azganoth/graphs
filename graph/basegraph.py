@@ -1,6 +1,8 @@
 from typing import Callable, Dict, Hashable, List, Set, Tuple
 from abc import abstractmethod
 
+from copy import deepcopy
+
 
 class BaseGraph:
     def __init__(self, name: str, description: str):
@@ -27,6 +29,30 @@ class BaseGraph:
     def __repr__(self):
         return (f'G({{{", ".join(map(str, self.vertices))}}}, '
                 f'[{", ".join(map(lambda e: f"({e[0]}, {e[1]})", self.edges_list()))}])')
+
+    def __copy__(self):
+        cls = self.__class__
+        result = cls.__new__(cls)
+
+        result.__dict__.update(self.__dict__)
+
+        return result
+
+    # noinspection PyArgumentList
+    def __deepcopy__(self, memodict: dict = None):
+        if memodict is None:
+            memodict = dict()
+
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memodict[id(self)] = result
+
+        result._name = self._name
+        result._description = self._description
+        result._vertices = deepcopy(self._vertices, memodict)
+        result._edges = deepcopy(self._edges, memodict)
+
+        return result
 
     @property
     def name(self):
