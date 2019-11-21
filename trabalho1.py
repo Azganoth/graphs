@@ -4,18 +4,12 @@ from time import sleep
 from re import compile as re_compile
 
 from graph import Graph, Digraph
-
-
-def true_false_input(message: str) -> bool:
-    response = ''
-    while response not in ('s', 'n'):
-        response = input(message).strip().lower()
-    return {'s': True, 'n': False}[response]
+from utils import ask_true_false_br
 
 
 vertices_re = re_compile(r'[^,]+')
-edges_weightless_re = re_compile(r'([^,])+(?:,)([^,])(?:;)')
-edges_weighted_re = re_compile(r'([^,])+(?:,)([^,])(?:,)([^;]+)(?:;)')
+edges_weightless_re = re_compile(r'([^,]+)(?:,)([^,]+)(?:;)')
+edges_weighted_re = re_compile(r'([^,]+)(?:,)([^,]+)(?:,)([^;]+)(?:;)')
 
 if __name__ == '__main__':
     print(dedent("""
@@ -29,9 +23,9 @@ if __name__ == '__main__':
 
     sleep(1)
 
-    directed = true_false_input("O grafo é orientado? (s/n): ")
+    directed = ask_true_false_br("O grafo é orientado? (s/n) ")
     # directed = True
-    weighted = true_false_input("O grafo é valorado (apenas arestas)? (s/n): ")
+    weighted = ask_true_false_br("O grafo é valorado (apenas arestas)? (s/n) ")
     # weighted = True
 
     graph = Digraph() if directed else Graph()
@@ -43,7 +37,7 @@ if __name__ == '__main__':
         Informe o conjunto V do grafo, e.g. 'u,v,x,y' (sem aspas):
         """))))
         # temp_set_v = set(vertices_re.findall('s,u,x,v,y'))
-        if true_false_input(f"Conjunto V := {{{', '.join(temp_set_v)}}}? (s/n): "):
+        if ask_true_false_br(f"Conjunto V := {{{', '.join(temp_set_v)}}}? (s/n) "):
             set_v = temp_set_v
 
     for vertex in set_v:
@@ -58,9 +52,9 @@ if __name__ == '__main__':
         """))))
         # temp_set_e = set(edges_re.findall(
         #     's,x,5;s,u,10;x,u,3;x,y,2;u,x,2;u,v,1;v,y,4;y,v,6;y,s,7;'))
-        if true_false_input(f"Conjunto E := {{"
-                            f"{', '.join(map(lambda e: f'({e[0]}, {e[1]}, {e[2]})', temp_set_e))}"
-                            f"}}? (s/n): "):
+        if ask_true_false_br(f"Conjunto E := {{"
+                             f"{', '.join(map(lambda e: f'({e[0]}, {e[1]}, {e[2]})', temp_set_e))}"
+                             f"}}? (s/n) "):
             set_e = temp_set_e
 
     for edge in set_e:

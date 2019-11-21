@@ -3,18 +3,12 @@ from time import sleep
 from re import compile as re_compile
 
 from graph import Graph, kruskal, prim_jarnik
-
-
-def true_false_input(message: str) -> bool:
-    response = ''
-    while response not in ('s', 'n'):
-        response = input(message).strip().lower()
-    return {'s': True, 'n': False}[response]
+from utils import ask_true_false_br
 
 
 vertices_re = re_compile(r'[^,]+')
-edges_weightless_re = re_compile(r'([^,])+(?:,)([^,])(?:;)')
-edges_weighted_re = re_compile(r'([^,])+(?:,)([^,])(?:,)([^;]+)(?:;)')
+edges_weightless_re = re_compile(r'([^,]+)(?:,)([^,]+)(?:;)')
+edges_weighted_re = re_compile(r'([^,]+)(?:,)([^,]+)(?:,)([^;]+)(?:;)')
 
 if __name__ == '__main__':
     print(dedent("""
@@ -30,7 +24,7 @@ if __name__ == '__main__':
 
     sleep(1)
 
-    weighted = true_false_input("O grafo é valorado (apenas arestas)? (s/n): ")
+    weighted = ask_true_false_br("O grafo é valorado (apenas arestas)? (s/n) ")
     # weighted = True
 
     graph = Graph()
@@ -42,7 +36,7 @@ if __name__ == '__main__':
         Informe o conjunto V do grafo, e.g. 'u,v,x,y' (sem aspas):
         """))))
         # temp_set_v = set(vertices_re.findall('0,1,2,3,4,5,6,7,8'))
-        if true_false_input(f"Conjunto V := {{{', '.join(temp_set_v)}}}? (s/n): "):
+        if ask_true_false_br(f"Conjunto V := {{{', '.join(temp_set_v)}}}? (s/n) "):
             set_v = temp_set_v
 
     for vertex in set_v:
@@ -66,9 +60,9 @@ if __name__ == '__main__':
         if [v for v in set_v if v not in temp_set_e_u and v not in temp_set_e_v]:
             print("Informe um conjunto de arestas que formem um grafo conexo! "
                   "(utiliza todos os vértices)")
-        elif true_false_input(f"Conjunto E := {{"
+        elif ask_true_false_br(f"Conjunto E := {{"
                               f"{', '.join(map(lambda e: f'({e[0]}, {e[1]})', temp_set_e))}"
-                              f"}}? (s/n): "):
+                              f"}}? (s/n) "):
             set_e = temp_set_e
 
     for edge in set_e:
