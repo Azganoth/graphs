@@ -61,6 +61,40 @@ def dijkstra(graph: BaseGraph, start_vertex: Hashable, weight: Callable[[dict], 
     return distance, parents
 
 
+def dijkstra_to(graph: BaseGraph, start_vertex: Hashable, end_vertex: Hashable,
+                weight: Callable[[dict], int]):
+    vertices = set(graph.vertices)
+    distance = {}
+    parents = {}
+    for v in vertices:
+        distance[v] = inf
+        parents[v] = None
+
+    distance[start_vertex] = 0
+
+    while vertices:
+        u = min(vertices, key=lambda x: distance[x])
+        vertices.remove(u)
+
+        if u == end_vertex:
+            cost, path = {start_vertex: 0, u: distance[u]}, [u]
+
+            while u != start_vertex:
+                cost[u] = distance[u]
+                path.append(u := parents[u])
+
+            path.reverse()
+            return cost, path
+
+        for v in graph.neighbours(u):
+            temp_distance = distance[u] + weight(graph.edges[u][v])
+            if temp_distance < distance[v]:
+                distance[v] = temp_distance
+                parents[v] = u
+
+    return None
+
+
 def bellman_ford(graph: BaseGraph, start_vertex: Hashable, weight: Callable[[dict], int]):
     distance = {}
     parents = {}
